@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Статья блога
+{% endblock %}
+
+{% block main %}
+    <p>Cтраница, на которой будет отображаться статья по id # {{article_id}}</p>
+    <a href="update" class="article_id_update">Изменить существующую статью</a>
+{% endblock %}

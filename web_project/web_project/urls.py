@@ -1,5 +1,5 @@
 """
-URL configuration for web_project project.
+URL configuration for web_module1 project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
@@ -14,9 +14,25 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
+
+from django.urls import path, include, re_path, register_converter
+from myapp.views import main, my_feed, create, profile, register, set_password, login, logout, regex, FourDigitYearConverter
+
+
+register_converter(FourDigitYearConverter, "yyyy")
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', main, name = 'main'),
+    path('my-feed', my_feed, name = 'my_feed'),
+    path('<int:article_id>/', include('myapp.article_urls')),
+    path('create', create, name = 'create'),
+    path('topics/', include('myapp.topic_urls'), name = 'topics'),
+    path('profile', profile),
+    path('register', register, name = 'register'),
+    path('set-password', set_password),
+    path('login', login, name = 'login'),
+    path('logout', logout),
+    re_path(
+        r"^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/$",
+        regex),
 ]
