@@ -17,12 +17,14 @@ Including another URLconf
 
 from django.urls import path, include, re_path, register_converter
 from myapp.views import main, my_feed, create, profile, register, set_password, login, logout, regex, FourDigitYearConverter
+from django.contrib import admin
 
 
 register_converter(FourDigitYearConverter, "yyyy")
 
 urlpatterns = [
     path('', main, name = 'main'),
+    path('admin/', admin.site.urls),
     path('my-feed', my_feed, name = 'my_feed'),
     path('<int:article_id>/', include('myapp.article_urls')),
     path('create', create, name = 'create'),

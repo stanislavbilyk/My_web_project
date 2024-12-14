@@ -1,11 +1,15 @@
 from django.http import HttpResponse, HttpRequest
 from datetime import datetime
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from .models import Topic, Article
+from .forms import ArticleForm
+
 
 
 # Поздравляю, это ваш первый контроллер, который может принять запрос и отдать ответ с текстом, больше ничего
 def main(request) -> HttpResponse:
-    return render(request, 'main.html')
+    topics = Topic.objects.all()
+    return render(request, 'main.html', {'topics': topics})
 
 def my_feed(request) -> HttpResponse:
     return render(request, 'my_feed.html')
@@ -38,10 +42,21 @@ def main_topics(request: HttpRequest) -> HttpResponse:
     return render(request, 'topics.html')
 
 
-def main_topic_id(request: HttpRequest, topic_id: int) -> HttpResponse:
+def main_topic_id(request: HttpRequest, id: int) -> HttpResponse:
+    topics = Topic.objects.all()
+    articles = Article.objects.filter(topic__id=id)
     return render(request, 'topic_id.html',{
-        'topic_id' : topic_id,
+        'topic_id' : id, 'articles': articles, 'topics': topics
     })
+
+# def topic_detail(request, pk):
+#     topic = get_object_or_404(Topic, pk=pk)
+#     articles = topic.articles.all()  # Получаем связанные статьи
+#     return render(request, 'topic_detail.html', {'topic': topic, 'articles': articles})
+#
+# def article_detail(request, pk):
+#     article = get_object_or_404(Article, pk=pk)
+#     return render(request, 'article_detail.html', {'article': article})
 
 
 def topic_id_subscribe(request: HttpRequest, topic_id: int) -> HttpResponse:
@@ -103,5 +118,7 @@ def regex(request, year, month):
     })
     except ValueError:
         return HttpResponse("Ошибка: Некорректная дата", status=400)
+
+
 
 
