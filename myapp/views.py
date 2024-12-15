@@ -3,20 +3,25 @@ from datetime import datetime
 from django.shortcuts import render, get_object_or_404
 from .models import Topic, Article
 from .forms import ArticleForm
+from .forms import AuthenticationForm
+from django.contrib.auth import login
+from django.http import HttpResponseRedirect
 
 
 
-# Поздравляю, это ваш первый контроллер, который может принять запрос и отдать ответ с текстом, больше ничего
+
 def main(request) -> HttpResponse:
     topics = Topic.objects.all()
-    return render(request, 'main.html', {'topics': topics})
+    articles = Article.objects.all()
+    return render(request, 'main.html', {'topics': topics, 'articles': articles})
 
 def my_feed(request) -> HttpResponse:
     return render(request, 'my_feed.html')
 
 def main_article_id(request, article_id: int) -> HttpResponse:
+    article = get_object_or_404(Article, id=article_id)
     return render(request, 'article_id.html', {
-        'article_id' : article_id,
+        'article' : article,
     })
 
 
@@ -79,9 +84,6 @@ def set_password(request: HttpRequest) -> HttpResponse:
     return render(request, 'set_password.html')
 
 
-def login(request: HttpRequest) -> HttpResponse:
-    return render(request, 'login.html')
-
 
 def logout(request: HttpRequest) -> HttpResponse:
     return HttpResponse("Адрес для выхода с сайта.")
@@ -118,6 +120,24 @@ def regex(request, year, month):
     })
     except ValueError:
         return HttpResponse("Ошибка: Некорректная дата", status=400)
+
+def my_login(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = AuthenticationForm(request.POST)
+        # check validity:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # some actions
+            login(request, form.user)
+            return HttpResponseRedirect('/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'login.html', {'form': form})
 
 
 

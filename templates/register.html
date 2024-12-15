@@ -5,5 +5,38 @@
 {% endblock %}
 
 {% block main %}
-    Страница регистрации нового пользователя
+    <section class="LoginAccountForm">
+          <h1>Войти в аккаунт</h1>
+          <form method="post">
+          {% csrf_token %}
+          {{ form }}
+          <button type="submit">Login</button>
+
+          <input
+            required
+            type="text"
+            name="username"
+            placeholder="&#128100;&nbsp;Username"
+          />
+          <input
+            required
+            type="email"
+            name="email"
+            placeholder="&#128233;&nbsp;Email Address"
+          />
+          <input
+            required
+            type="password"
+            name="password"
+            placeholder="&#128274;&nbsp;Password"
+          />
+          <input
+            required
+            type="password"
+            name="confirmpassword"
+            placeholder="&#128274;&nbsp;Confirm Password"
+          />
+          <a href="profile" class="login-button">Войти</a>
+          </form>
+    </section>
 {% endblock %}

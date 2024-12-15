@@ -16,7 +16,7 @@ Including another URLconf
 """
 
 from django.urls import path, include, re_path, register_converter
-from myapp.views import main, my_feed, create, profile, register, set_password, login, logout, regex, FourDigitYearConverter
+from myapp.views import main, my_feed, create, profile, register, set_password, my_login, logout, regex, FourDigitYearConverter
 from django.contrib import admin
 
 
@@ -32,7 +32,7 @@ urlpatterns = [
     path('profile', profile),
     path('register', register, name = 'register'),
     path('set-password', set_password),
-    path('login', login, name = 'login'),
+    path('login', my_login, name = 'login'),
     path('logout', logout),
     re_path(
         r"^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/$",

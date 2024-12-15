@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Все статьи по теме
+    All atricles on the topic {{topic.name}}
 {% endblock %}
 
 {% block main %}
@@ -12,7 +12,9 @@
     {% endif %}
     <h2>{{ article.title }}</h2>
     <br>
-    <div> {{article.content}} </div>
+    <div>
+        <a href="{% url 'article_id' article.id %}">{{ article.content|truncatechars:50 }}</a>
+    </div>
     <br>
     <div> {{article.created_at}}</div>
     <br>

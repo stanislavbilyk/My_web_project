@@ -1,9 +1,47 @@
 {% extends 'base.html' %}
 
 {% block main %}
-    Основная страница, на которой будет список всех статей
+    {% for article in articles %}
+<div>
+    {% if article.image %}
+        <img src="{{ article.image.url }}" alt="{{ article.title }}" style="max-width: 100%; height: auto;">
+    {% endif %}
+    <h2>{{ article.title }}</h2>
+    <br>
+    <div>
+        {% for topic in article.topic.all %}
+            <a href="{% url 'topic_id' topic.id %}">{{ topic.get_name_display }}</a>
+        {% endfor %}
+    </div>
+    <br>
+    <div>
+        <a href="{% url 'article_id' article.id %}">{{ article.content|truncatechars:50 }}</a>
+    </div>
+    <br>
+    <div> {{article.created_at}}</div>
+    <br>
+    BY: {{ article.author.username }}
+    {% if article.youtube_url %}
+    <div>
+        <a href="{{ article.youtube_url }}" target="_blank">Смотреть видео</a>
+    </div>
+    {% endif %}
+    <br>
+    {% for comment in article.comment_set.all %}
+    <br>
+    BY: {{ comment.user.username }}
+    <br>
+    {{ comment.text }}
+    <br>
+
+    {% endfor %}
+    <br>
+    <br>
+    <br>
+</div>
+    {% endfor %}
 {% endblock %}
 
 {% block title %}
-    Главная страница
+    Main page
 {% endblock %}

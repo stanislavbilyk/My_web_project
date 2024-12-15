@@ -5,13 +5,34 @@
 {% endblock %}
 
 {% block main %}
-    {% for article in articles %}
+    <div>
+    {% if article.image %}
+        <img src="{{ article.image.url }}" alt="{{ article.title }}" style="max-width: 100%; height: auto;">
+    {% endif %}
+    <h2>{{ article.title }}</h2>
+    <br>
     <div> {{article.content}} </div>
+    <br>
     <div> {{article.created_at}}</div>
     <br>
-    BY: {{user.username}}
+    BY: {{ article.author.username }}
+    {% if article.youtube_url %}
+    <div>
+        <a href="{{ article.youtube_url }}" target="_blank">Смотреть видео</a>
+    </div>
+    {% endif %}
+    <br>
     {% for comment in article.comment_set.all %}
     <br>
+    BY: {{ comment.user.username }}
+    <br>
     {{ comment.text }}
-    {% end for %}
+    <br>
+
+    {% endfor %}
+    <br>
+    <br>
+    <br>
+</div>
+
 {% endblock %}
